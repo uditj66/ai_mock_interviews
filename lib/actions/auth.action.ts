@@ -3,7 +3,7 @@ import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 
 // Session duration (1 week)
-const SESSION_DURATION = 60*3;
+const SESSION_DURATION = 60*60*24*7;
 
 export async function signUp(params: SignUpParams) {
   //  uid => is generateed by Auth of firebase's client SDK  by calling the createUserWithEmailAndPassword(auth,email,password) function
