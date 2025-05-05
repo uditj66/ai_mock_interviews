@@ -206,7 +206,7 @@ export const interviewCovers = [
 
 export const dummyInterviews: Interview[] = [
   {
-    id: "1",
+    interviewId: "1",
     userId: "user1",
     role: "Frontend Developer",
     type: "Technical",
@@ -217,7 +217,7 @@ export const dummyInterviews: Interview[] = [
     createdAt: "2024-03-15T10:00:00Z",
   },
   {
-    id: "2",
+    interviewId: "2",
     userId: "user1",
     role: "Full Stack Developer",
     type: "Mixed",

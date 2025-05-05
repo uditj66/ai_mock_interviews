@@ -4,22 +4,18 @@ import Link from "next/link";
 import React, { ReactNode } from "react";
 import InterviewCard from "../../components/InterviewCard";
 import {
-  getCurrentUser,
   getInterviewByUserId,
   getLatestInterviews,
-} from "@/lib/actions/auth.action";
-
+} from "@/lib/actions/general.action";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 const page = async ({ children }: { children: ReactNode }) => {
   const user = await getCurrentUser();
- console.log(user?.id);
- 
-  
+
   const [userInterviews, latestInterviews] = await Promise.all([
     await getInterviewByUserId(user?.id!),
     await getLatestInterviews({ userId: user?.id! }),
   ]);
-  console.log(userInterviews);
-  
+
   // const userInterviews = await getInterviewByUserId(user?.id!);
   // const latestInterviews=await getLatestInterviews({userId:user?.id!})
   const hasPastInterviews = userInterviews?.length! > 0;
@@ -53,7 +49,7 @@ const page = async ({ children }: { children: ReactNode }) => {
         <div className="interviews-section">
           {hasPastInterviews ? (
             userInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard {...interview} key={interview.interviewId} />
             ))
           ) : (
             <p>You haven&apos;t take any interviews yet</p>
@@ -65,7 +61,7 @@ const page = async ({ children }: { children: ReactNode }) => {
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
             latestInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard {...interview} key={interview.interviewId} />
             ))
           ) : (
             <p> There are no new interviews available</p>

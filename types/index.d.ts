@@ -14,7 +14,7 @@ interface Feedback {
 }
 
 interface Interview {
-  id: string;
+  interviewId: string;
   role: string;
   level: string;
   questions: string[];
