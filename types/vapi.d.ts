@@ -16,6 +16,11 @@ enum TranscriptMessageTypeEnum {
   FINAL = "final",
 }
 
+type Message =
+  | TranscriptMessage
+  | FunctionCallMessage
+  | FunctionCallResultMessage;
+  
 interface BaseMessage {
   type: MessageTypeEnum;
 }
@@ -43,8 +48,3 @@ interface FunctionCallResultMessage extends BaseMessage {
     [a: string]: unknown;
   };
 }
-
-type Message =
-  | TranscriptMessage
-  | FunctionCallMessage
-  | FunctionCallResultMessage;
