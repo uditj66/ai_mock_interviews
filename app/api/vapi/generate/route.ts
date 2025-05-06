@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     `,
     });
 
-    // generate text return an object with various key-value pair.Most of the time we are interested in firstkey is text which is a string ,here in our prompt we request ai to return the text in string of question array so that'why we use JSON.parse(questionFromAi) so that we can iterrate over the array
+    // generate text return an object with various key-value pair.Most of the time we are interested in firstkey called as text which is a string ,here in our prompt we request ai to return the text in string of question array so that'why we use JSON.parse(questionFromAi) so that we can iterrate over the array
     const interview = {
       role,
       type,

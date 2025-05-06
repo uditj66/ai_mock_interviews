@@ -8,6 +8,7 @@ import DisplayTechIcons from "@/components/DisplayTechIcons";
 import Agent from "@/components/Agent";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 const page = async ({ params }: RouteParams) => {
+  //  always use same dynamic route variable name used as in folder structure when destructuring the params
   const { id } = await params;
   const user = await getCurrentUser();
   const interview = await getInterviewById(id);

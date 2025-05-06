@@ -5,7 +5,8 @@ import { getRandomInterviewCover } from "../lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import DisplayTechIcons from "./DisplayTechIcons";
-const InterviewCard = ({
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+const InterviewCard = async ({
   interviewId,
   userId,
   type,
@@ -17,7 +18,11 @@ const InterviewCard = ({
    1.You want to explicitly declare the type for clarity or for future assignment.
    2.You're initializing a variable with null, but you plan to assign a proper Feedback object to it later. 
    3. other way to do samething is => let feedback: Feedback | null = null;*/
-  const feedback = null as Feedback | null;
+  // const feedback = null as Feedback | null;
+  const feedback =
+    userId && interviewId
+      ? await getFeedbackByInterviewId({ interviewId, userId })
+      : null;
 
   /* It checks if the string stored in the type variable contains the word “mix” (case-insensitive).
   1./mix/gi is a regular expression:
@@ -60,17 +65,22 @@ const InterviewCard = ({
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <Image src="star.svg" alt="star" width={22} height={22} />
-                <p>{feedback?.totalScore || "---"}/100</p>
+
+                {/* ?? => nullish coalescing operator works on [null ,undefined, "  empty string ",0]
+                    ?. => optional chaining 
+                    || => fallback works on [null and undefined]
+                    ? : => ternary opeartor   */}
+                <p>{feedback?.totalScore ?? "---"}/100</p>
               </div>
             </div>
             <p className="line-clamp-2 mt-5">
-              {feedback?.finalAssessment ||
-                "You haven't taken the interview yet .Take it now to improve your skills "}
+              {feedback?.finalAssessment ??
+                "You haven't taken the interview yet .Take it now  to improve your skills "}
             </p>
           </div>
           <div className="flex flex-row justify-between">
             {/* <p>Tech Icons</p> */}
-            <DisplayTechIcons techStack={techstack}/>
+            <DisplayTechIcons techStack={techstack} />
             <Button asChild className="bt-primary">
               <Link
                 href={
@@ -79,7 +89,7 @@ const InterviewCard = ({
                     : `/interview/${interviewId}`
                 }
               >
-                {feedback ? "check feedback" : "View Interview"}
+                {feedback ? "check feedback" : "Take Interview"}
               </Link>
             </Button>
           </div>

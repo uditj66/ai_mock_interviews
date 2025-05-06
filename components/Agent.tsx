@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/constants";
+import { createFeedBack } from "@/lib/actions/general.action";
 enum CallStatus {
   INACTIVE = "INACTIVE",
   CONNECTING = "CONNECTING",
@@ -64,13 +65,14 @@ const Agent = ({
 
   const handleGenerateFeedBack = async (messages: SavedMessages[]) => {
     console.log("generate feedback here");
-
-    const { success, id } = {
-      success: true,
-      id: "feedback-id",
-    };
     //  TODO : create a server action that generates feedback
-    if (success && id) {
+    const { success, feedbackId } = await createFeedBack({
+      interviewId: interviewId!,
+      userId: userId!,
+      transcript: messages,
+    });
+
+    if (success && feedbackId) {
       router.push(`/interview/${interviewId}/feedback`);
     } else {
       console.log("error creating feedback");
@@ -98,6 +100,8 @@ const Agent = ({
         },
       });
     } else {
+      // type == interview then ,this function handleCall( ) wiil create an an formattedQuestions string whic h is initially empty and then map over the questions array and called each index as question itself and the callbc() add an hyphen in the begining of each question and .join () converts the values in the array to string seperated by new line i.e using \n.
+
       let formattedQuestions = "";
       if (questions) {
         formattedQuestions = questions
