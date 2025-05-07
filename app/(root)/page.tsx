@@ -27,7 +27,7 @@ const page = async ({ children }: { children: ReactNode }) => {
           <h2>
             Get Interview-ready with AI-powered practice session & feedback
           </h2>
-          <p className="text-lg">
+          <p className="text-lg text-justify">
             Practice on real interviews questions and get instant feedback ,
             click below to prepare an interview according to your Skills
           </p>

@@ -18,9 +18,7 @@ const InterviewCard = async ({
    1.You want to explicitly declare the type for clarity or for future assignment.
    2.You're initializing a variable with null, but you plan to assign a proper Feedback object to it later. 
    3. other way to do samething is => let feedback: Feedback | null = null;*/
-  // const feedback = null as Feedback | null;
-
-  let feedback = null;
+  let feedback = null as Feedback | null;
   if (userId && interviewId) {
     feedback = await getFeedbackByInterviewId({ interviewId, userId });
   }
@@ -74,7 +72,7 @@ const InterviewCard = async ({
                 <p>{feedback?.totalScore ?? "---"}/100</p>
               </div>
             </div>
-            <p className="line-clamp-2 mt-5">
+            <p className="line-clamp-2 mt-5 text-justify">
               {feedback?.finalAssessment ??
                 "You haven't taken the interview yet .Take it now  to improve your skills "}
             </p>
