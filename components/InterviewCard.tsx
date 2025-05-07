@@ -19,10 +19,11 @@ const InterviewCard = async ({
    2.You're initializing a variable with null, but you plan to assign a proper Feedback object to it later. 
    3. other way to do samething is => let feedback: Feedback | null = null;*/
   // const feedback = null as Feedback | null;
-  const feedback =
-    userId && interviewId
-      ? await getFeedbackByInterviewId({ interviewId, userId })
-      : null;
+
+  let feedback = null;
+  if (userId && interviewId) {
+    feedback = await getFeedbackByInterviewId({ interviewId, userId });
+  }
 
   /* It checks if the string stored in the type variable contains the word “mix” (case-insensitive).
   1./mix/gi is a regular expression:
@@ -66,7 +67,7 @@ const InterviewCard = async ({
               <div className="flex flex-row gap-2 items-center">
                 <Image src="star.svg" alt="star" width={22} height={22} />
 
-                {/* ?? => nullish coalescing operator works on [null ,undefined, "  empty string ",0]
+                {/* ?? => nullish coalescing operator fallbacks works on [null ,undefined, "  empty string ",0]
                     ?. => optional chaining 
                     || => fallback works on [null and undefined]
                     ? : => ternary opeartor   */}

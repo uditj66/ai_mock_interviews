@@ -28,11 +28,12 @@ const page = async ({ children }: { children: ReactNode }) => {
             Get Interview-ready with AI-powered practice session & feedback
           </h2>
           <p className="text-lg">
-            Practice on real interviews questions and get instant feedback
+            Practice on real interviews questions and get instant feedback ,
+            click below to prepare an interview according to your Skills
           </p>
 
           <Button asChild className="btn-primary max-sm:w-full">
-            <Link href="/interview">Start an Interview</Link>
+            <Link href="/interview">Prepare an Interview </Link>
           </Button>
           {/* as child treat link as main tag not the button so all the css of the button applies to the Link tag.“Don’t make a <button> tag. Just apply your styles and behavior to the <a> inside.And this helps avoid wrong HTML and gives you more flexibility */}
         </div>
@@ -57,7 +58,7 @@ const page = async ({ children }: { children: ReactNode }) => {
         </div>
       </section>
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take any Interview</h2>
+        <h2>Take any Interview to get a reality check </h2>
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
             latestInterviews?.map((interview) => (

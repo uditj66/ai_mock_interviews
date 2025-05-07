@@ -115,10 +115,10 @@ export async function getFeedbackByInterviewId(
     .collection("feedback")
     .where("interviewId", "==", interviewId)
     .where("userId", "==", userId)
+    .orderBy("createdAt", "desc")
     .get();
-  
 
-    // Incase the feedback is not generated 
+  // Incase the feedback is not generated
   if (feedback.empty) return null;
 
   //  if feedback generated then return the recent one feedback
