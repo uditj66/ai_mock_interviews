@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import DisplayTechIcons from "./DisplayTechIcons";
 import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 const InterviewCard = async ({
   interviewId,
   userId,
@@ -19,8 +20,10 @@ const InterviewCard = async ({
    2.You're initializing a variable with null, but you plan to assign a proper Feedback object to it later. 
    3. other way to do samething is => let feedback: Feedback | null = null;*/
   let feedback = null as Feedback | null;
-  if (userId && interviewId) {
-    feedback = await getFeedbackByInterviewId({ interviewId, userId });
+  const user = await getCurrentUser();
+  const loginUserId = user?.id;
+  if (loginUserId && interviewId) {
+    feedback = await getFeedbackByInterviewId({ loginUserId, interviewId });
   }
 
   /* It checks if the string stored in the type variable contains the word “mix” (case-insensitive).

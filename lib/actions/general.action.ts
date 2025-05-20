@@ -109,20 +109,20 @@ export async function createFeedBack(params: CreateFeedbackParams) {
 export async function getFeedbackByInterviewId(
   params: GetFeedbackByInterviewIdParams
 ): Promise<Feedback | null> {
-  const { interviewId, userId } = params;
+  const { interviewId, loginUserId } = params;
 
   const feedback = await db
     .collection("feedback")
     .where("interviewId", "==", interviewId)
-    .where("userId", "==", userId)
+    .where("userId", "==", loginUserId)
     .orderBy("createdAt", "desc")
     .get();
-
   // Incase the feedback is not generated
   if (feedback.empty) return null;
 
   //  if feedback generated then return the recent one feedback
   const feedbackDocs = feedback.docs[0];
+
   return {
     id: feedbackDocs.id,
     ...feedbackDocs.data(),

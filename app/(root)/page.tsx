@@ -8,9 +8,13 @@ import {
   getLatestInterviews,
 } from "@/lib/actions/general.action";
 import { getCurrentUser } from "@/lib/actions/auth.action";
+import { redirect } from "next/navigation";
+
 const page = async ({ children }: { children: ReactNode }) => {
   const user = await getCurrentUser();
-
+  if(!user){
+    redirect("/login");
+  }
   const [userInterviews, latestInterviews] = await Promise.all([
     await getInterviewByUserId(user?.id!),
     await getLatestInterviews({ userId: user?.id! }),
@@ -18,8 +22,11 @@ const page = async ({ children }: { children: ReactNode }) => {
 
   // const userInterviews = await getInterviewByUserId(user?.id!);
   // const latestInterviews=await getLatestInterviews({userId:user?.id!})
+  
+
   const hasPastInterviews = userInterviews?.length! > 0;
   const hasUpcomingInterviews = latestInterviews?.length! > 0;
+
   return (
     <>
       <section className="card-cta">

@@ -125,8 +125,40 @@ export async function getCurrentUser(): Promise<User | null> {
   }
 }
 
-// Check if user is authenticated and return type of thi s function  is boolean
+// Check if user is authenticated and return type of this function  is boolean
 export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
+}
+export async function handleGoogleAuth(params: {
+  uid: string;
+  email: string;
+  name: string;
+  idToken: string;
+}) {
+  const { uid, email, name, idToken } = params;
+
+  try {
+    // Try to sign in (this checks user existence + sets session)
+    const result = await signIn({ email, idToken });
+
+    if (!result?.success) {
+      // If user does not exist, sign up
+      await signUp({ uid, name, email} );
+
+      // Try signing in again
+      await signIn({ email, idToken });
+    }
+
+    return {
+      success: true,
+      message: "Google Sign-In successful",
+    };
+  } catch (error: any) {
+    console.error("Google Auth Error:", error);
+    return {
+      success: false,
+      message: "Google Sign-In failed",
+    };
+  }
 }

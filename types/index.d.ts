@@ -63,7 +63,7 @@ interface RouteParams {
 
 interface GetFeedbackByInterviewIdParams {
   interviewId: string;
-  userId: string;
+  loginUserId: string;
 }
 
 interface GetLatestInterviewsParams {
@@ -74,13 +74,14 @@ interface GetLatestInterviewsParams {
 interface SignInParams {
   email: string;
   idToken: string;
+ 
 }
 
 interface SignUpParams {
   uid: string;
   name: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 type FormType = "sign-in" | "sign-up";
