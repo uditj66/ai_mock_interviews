@@ -1,8 +1,9 @@
 import { Button } from "../../components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import React from "react";
 import InterviewCard from "../../components/InterviewCard";
+import ClientPagination from "../../components/ClientPagination";
 import {
   getInterviewByUserId,
   getLatestInterviews,
@@ -10,11 +11,24 @@ import {
 import { getCurrentUser } from "@/lib/actions/auth.action";
 import { redirect } from "next/navigation";
 
-const page = async ({ children }: { children: ReactNode }) => {
+const ITEMS_PER_PAGE = 6;
+
+const page = async ({
+  searchParams,
+}: {
+  searchParams: {
+    userPage?: string;
+    latestPage?: string;
+  };
+}) => {
   const user = await getCurrentUser();
-  if(!user){
+  if (!user) {
     redirect("/login");
   }
+
+  const userPage = Number(searchParams.userPage) || 1;
+  const latestPage = Number(searchParams.latestPage) || 1;
+
   const [userInterviews, latestInterviews] = await Promise.all([
     await getInterviewByUserId(user?.id!),
     await getLatestInterviews({ userId: user?.id! }),
@@ -22,10 +36,31 @@ const page = async ({ children }: { children: ReactNode }) => {
 
   // const userInterviews = await getInterviewByUserId(user?.id!);
   // const latestInterviews=await getLatestInterviews({userId:user?.id!})
-  
 
   const hasPastInterviews = userInterviews?.length! > 0;
   const hasUpcomingInterviews = latestInterviews?.length! > 0;
+
+  // Calculate pagination for user interviews
+  const userTotalPages = Math.ceil(
+    (userInterviews?.length || 0) / ITEMS_PER_PAGE
+  );
+  const userStartIndex = (userPage - 1) * ITEMS_PER_PAGE;
+  const userEndIndex = userStartIndex + ITEMS_PER_PAGE;
+  const paginatedUserInterviews = userInterviews?.slice(
+    userStartIndex,
+    userEndIndex
+  );
+
+  // Calculate pagination for latest interviews
+  const latestTotalPages = Math.ceil(
+    (latestInterviews?.length || 0) / ITEMS_PER_PAGE
+  );
+  const latestStartIndex = (latestPage - 1) * ITEMS_PER_PAGE;
+  const latestEndIndex = latestStartIndex + ITEMS_PER_PAGE;
+  const paginatedLatestInterviews = latestInterviews?.slice(
+    latestStartIndex,
+    latestEndIndex
+  );
 
   return (
     <>
@@ -42,7 +77,7 @@ const page = async ({ children }: { children: ReactNode }) => {
           <Button asChild className="btn-primary max-sm:w-full">
             <Link href="/interview">Prepare an Interview </Link>
           </Button>
-          {/* as child treat link as main tag not the button so all the css of the button applies to the Link tag.“Don’t make a <button> tag. Just apply your styles and behavior to the <a> inside.And this helps avoid wrong HTML and gives you more flexibility */}
+          {/* as child treat link as main tag not the button so all the css of the button applies to the Link tag.“Don't make a <button> tag. Just apply your styles and behavior to the <a> inside.And this helps avoid wrong HTML and gives you more flexibility */}
         </div>
         <Image
           src="/robot.png"
@@ -56,9 +91,18 @@ const page = async ({ children }: { children: ReactNode }) => {
         <h2>Your Interviews</h2>
         <div className="interviews-section">
           {hasPastInterviews ? (
-            userInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.interviewId} />
-            ))
+            <>
+              {paginatedUserInterviews?.map((interview) => (
+                <InterviewCard {...interview} key={interview.interviewId} />
+              ))}
+              <div className="w-full flex justify-center mt-6">
+                <ClientPagination
+                  currentPage={userPage}
+                  totalPages={userTotalPages}
+                  paramName="userPage"
+                />
+              </div>
+            </>
           ) : (
             <p>You haven&apos;t take any interviews yet</p>
           )}
@@ -68,9 +112,18 @@ const page = async ({ children }: { children: ReactNode }) => {
         <h2>Take any Interview to get a reality check </h2>
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
-            latestInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.interviewId} />
-            ))
+            <>
+              {paginatedLatestInterviews?.map((interview) => (
+                <InterviewCard {...interview} key={interview.interviewId} />
+              ))}
+              <div className="w-full flex justify-center mt-6">
+                <ClientPagination
+                  currentPage={latestPage}
+                  totalPages={latestTotalPages}
+                  paramName="latestPage"
+                />
+              </div>
+            </>
           ) : (
             <p> There are no new interviews available</p>
           )}
